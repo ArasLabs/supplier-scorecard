@@ -1,0 +1,286 @@
+﻿<AML>
+ <Item type="RelationshipType" id="E3E754F52A3F406C87DF3833E438E6E1" action="add" dependencyLevel="1">
+  <auto_search>1</auto_search>
+  <behavior>float</behavior>
+  <copy_permissions>0</copy_permissions>
+  <create_related>0</create_related>
+  <hide_in_all>0</hide_in_all>
+  <inc_rel_key_name>1</inc_rel_key_name>
+  <inc_related_key_name>1</inc_related_key_name>
+  <is_list_type>0</is_list_type>
+  <label>ScoreCard Summary</label>
+  <name>sc Scorecard Location</name>
+  <new_show_related>0</new_show_related>
+  <related_id keyed_name="Location" type="ItemType" name="ItemType">E38F575C956649148C57C5F19FC282C7</related_id>
+  <related_notnull>0</related_notnull>
+  <related_option>2</related_option>
+  <relationship_id keyed_name="sc Scorecard Location" type="ItemType" name="sc Scorecard Location">
+   <Item type="ItemType" id="1F6309B7CEB14BE7B728C72CA2BA25E3" action="add">
+    <allow_private_permission>1</allow_private_permission>
+    <auto_search>0</auto_search>
+    <default_lifecycle keyed_name="Default" type="Life Cycle Map">2F3B75E17C4E4F2D9599579A965BFA64</default_lifecycle>
+    <hide_where_used>0</hide_where_used>
+    <implementation_type>table</implementation_type>
+    <instance_data>SC_SCORECARD_LOCATION</instance_data>
+    <is_dependent>0</is_dependent>
+    <is_relationship>1</is_relationship>
+    <is_versionable>0</is_versionable>
+    <label>Scorecard</label>
+    <label_plural>Scorecards</label_plural>
+    <manual_versioning>0</manual_versioning>
+    <name>sc Scorecard Location</name>
+    <open_icon>../images/Icons/16x16/16x16_logging.gif</open_icon>
+    <revisions keyed_name="Default" type="Revision">7FE395DD8B9F4E1090756A34B733D75E</revisions>
+    <save_history>0</save_history>
+    <show_parameters_tab>1</show_parameters_tab>
+    <unlock_on_logout>0</unlock_on_logout>
+    <use_src_access>1</use_src_access>
+    <Relationships>
+     <Item type="Property" id="A115B72F93B74EBF86D37F4000F17DD0" action="add">
+      <column_alignment>center</column_alignment>
+      <column_width>70</column_width>
+      <data_type>integer</data_type>
+      <default_value>10</default_value>
+      <is_hidden>0</is_hidden>
+      <is_hidden2>0</is_hidden2>
+      <is_indexed>0</is_indexed>
+      <is_keyed>0</is_keyed>
+      <is_multi_valued>0</is_multi_valued>
+      <is_required>0</is_required>
+      <label>Delivery</label>
+      <name>delivery</name>
+      <range_inclusive>0</range_inclusive>
+      <readonly>0</readonly>
+      <sort_order>3584</sort_order>
+      <source_id keyed_name="sc Scorecard Location" type="ItemType" name="sc Scorecard Location">1F6309B7CEB14BE7B728C72CA2BA25E3</source_id>
+     </Item>
+     <Item type="Property" id="5FEACA8448174E67A2A58913A6161F32" action="add">
+      <column_alignment>center</column_alignment>
+      <column_width>70</column_width>
+      <data_type>integer</data_type>
+      <default_value>20</default_value>
+      <is_hidden>0</is_hidden>
+      <is_hidden2>0</is_hidden2>
+      <is_indexed>0</is_indexed>
+      <is_keyed>0</is_keyed>
+      <is_multi_valued>0</is_multi_valued>
+      <is_required>0</is_required>
+      <label>Pricing</label>
+      <name>pricing</name>
+      <range_inclusive>0</range_inclusive>
+      <readonly>0</readonly>
+      <sort_order>3712</sort_order>
+      <source_id keyed_name="sc Scorecard Location" type="ItemType" name="sc Scorecard Location">1F6309B7CEB14BE7B728C72CA2BA25E3</source_id>
+     </Item>
+     <Item type="Property" id="C1F0976F6EC740F0AD9B6448AF4EBDE6" action="add">
+      <column_alignment>center</column_alignment>
+      <column_width>80</column_width>
+      <data_type>integer</data_type>
+      <default_value>10</default_value>
+      <is_hidden>0</is_hidden>
+      <is_hidden2>0</is_hidden2>
+      <is_indexed>0</is_indexed>
+      <is_keyed>0</is_keyed>
+      <is_multi_valued>0</is_multi_valued>
+      <is_required>0</is_required>
+      <label>Audit Scores</label>
+      <name>qi_audit_score</name>
+      <range_inclusive>0</range_inclusive>
+      <readonly>0</readonly>
+      <sort_order>4736</sort_order>
+      <source_id keyed_name="sc Scorecard Location" type="ItemType" name="sc Scorecard Location">1F6309B7CEB14BE7B728C72CA2BA25E3</source_id>
+     </Item>
+     <Item type="Property" id="B05F7D0ACC4E4CBEAC745BA5A54543B8" action="add">
+      <column_alignment>center</column_alignment>
+      <column_width>70</column_width>
+      <data_type>integer</data_type>
+      <default_value>10</default_value>
+      <is_hidden>0</is_hidden>
+      <is_hidden2>0</is_hidden2>
+      <is_indexed>0</is_indexed>
+      <is_keyed>0</is_keyed>
+      <is_multi_valued>0</is_multi_valued>
+      <is_required>0</is_required>
+      <label>PPMs</label>
+      <name>qi_ppm</name>
+      <range_inclusive>0</range_inclusive>
+      <readonly>0</readonly>
+      <sort_order>4608</sort_order>
+      <source_id keyed_name="sc Scorecard Location" type="ItemType" name="sc Scorecard Location">1F6309B7CEB14BE7B728C72CA2BA25E3</source_id>
+     </Item>
+     <Item type="Property" id="62DC85BEBDFE4B6F8484C648A4FB49AB" action="add">
+      <column_alignment>center</column_alignment>
+      <column_width>100</column_width>
+      <data_type>integer</data_type>
+      <default_value>10</default_value>
+      <is_hidden>0</is_hidden>
+      <is_hidden2>0</is_hidden2>
+      <is_indexed>0</is_indexed>
+      <is_keyed>0</is_keyed>
+      <is_multi_valued>0</is_multi_valued>
+      <is_required>0</is_required>
+      <label>Supplier Change Notices</label>
+      <name>qi_scn</name>
+      <range_inclusive>0</range_inclusive>
+      <readonly>0</readonly>
+      <sort_order>4864</sort_order>
+      <source_id keyed_name="sc Scorecard Location" type="ItemType" name="sc Scorecard Location">1F6309B7CEB14BE7B728C72CA2BA25E3</source_id>
+     </Item>
+     <Item type="Property" id="83C6D781EA99445F91609557F4DC8CFB" action="add">
+      <column_alignment>center</column_alignment>
+      <column_width>70</column_width>
+      <data_type>integer</data_type>
+      <default_value>10</default_value>
+      <is_hidden>0</is_hidden>
+      <is_hidden2>0</is_hidden2>
+      <is_indexed>0</is_indexed>
+      <is_keyed>0</is_keyed>
+      <is_multi_valued>0</is_multi_valued>
+      <is_required>0</is_required>
+      <label>Responsiveness</label>
+      <name>responsiveness</name>
+      <range_inclusive>0</range_inclusive>
+      <readonly>0</readonly>
+      <sort_order>3840</sort_order>
+      <source_id keyed_name="sc Scorecard Location" type="ItemType" name="sc Scorecard Location">1F6309B7CEB14BE7B728C72CA2BA25E3</source_id>
+     </Item>
+     <Item type="Property" id="1967EC6C5B8A43EC99C17BEC4AF97649" action="add">
+      <column_alignment>center</column_alignment>
+      <column_width>90</column_width>
+      <data_type>integer</data_type>
+      <default_value>5</default_value>
+      <is_hidden>0</is_hidden>
+      <is_hidden2>0</is_hidden2>
+      <is_indexed>0</is_indexed>
+      <is_keyed>0</is_keyed>
+      <is_multi_valued>0</is_multi_valued>
+      <is_required>0</is_required>
+      <label>C/A Plan Received &gt; 15 Days</label>
+      <name>scar_ca_plan</name>
+      <range_inclusive>0</range_inclusive>
+      <readonly>0</readonly>
+      <sort_order>4096</sort_order>
+      <source_id keyed_name="sc Scorecard Location" type="ItemType" name="sc Scorecard Location">1F6309B7CEB14BE7B728C72CA2BA25E3</source_id>
+     </Item>
+     <Item type="Property" id="8339F0457C354176ADE9C4F6F2634A56" action="add">
+      <column_alignment>center</column_alignment>
+      <column_width>90</column_width>
+      <data_type>integer</data_type>
+      <default_value>10</default_value>
+      <is_hidden>0</is_hidden>
+      <is_hidden2>0</is_hidden2>
+      <is_indexed>0</is_indexed>
+      <is_keyed>0</is_keyed>
+      <is_multi_valued>0</is_multi_valued>
+      <is_required>0</is_required>
+      <label>SCAR Incidents</label>
+      <name>scar_incidents</name>
+      <range_inclusive>0</range_inclusive>
+      <readonly>0</readonly>
+      <sort_order>4480</sort_order>
+      <source_id keyed_name="sc Scorecard Location" type="ItemType" name="sc Scorecard Location">1F6309B7CEB14BE7B728C72CA2BA25E3</source_id>
+     </Item>
+     <Item type="Property" id="1762998C3F644C4CAE165FCAF4FA8C77" action="add">
+      <column_alignment>center</column_alignment>
+      <column_width>90</column_width>
+      <data_type>integer</data_type>
+      <default_value>5</default_value>
+      <is_hidden>0</is_hidden>
+      <is_hidden2>0</is_hidden2>
+      <is_indexed>0</is_indexed>
+      <is_keyed>0</is_keyed>
+      <is_multi_valued>0</is_multi_valued>
+      <is_required>0</is_required>
+      <label>Open SCARS Prev Qtr</label>
+      <name>scar_open</name>
+      <range_inclusive>0</range_inclusive>
+      <readonly>0</readonly>
+      <sort_order>4224</sort_order>
+      <source_id keyed_name="sc Scorecard Location" type="ItemType" name="sc Scorecard Location">1F6309B7CEB14BE7B728C72CA2BA25E3</source_id>
+     </Item>
+     <Item type="Property" id="6FCB7FFEEEA643F088E72629D28B8F52" action="add">
+      <column_alignment>center</column_alignment>
+      <column_width>90</column_width>
+      <data_type>integer</data_type>
+      <default_value>5</default_value>
+      <is_hidden>0</is_hidden>
+      <is_hidden2>0</is_hidden2>
+      <is_indexed>0</is_indexed>
+      <is_keyed>0</is_keyed>
+      <is_multi_valued>0</is_multi_valued>
+      <is_required>0</is_required>
+      <label>Repeat SCARS</label>
+      <name>scar_repeat</name>
+      <range_inclusive>0</range_inclusive>
+      <readonly>0</readonly>
+      <sort_order>4352</sort_order>
+      <source_id keyed_name="sc Scorecard Location" type="ItemType" name="sc Scorecard Location">1F6309B7CEB14BE7B728C72CA2BA25E3</source_id>
+     </Item>
+     <Item type="Property" id="A6D46EA355364FF58345DDAA569F76CB" action="add">
+      <column_alignment>center</column_alignment>
+      <column_width>80</column_width>
+      <data_type>integer</data_type>
+      <default_value>5</default_value>
+      <is_hidden>0</is_hidden>
+      <is_hidden2>0</is_hidden2>
+      <is_indexed>0</is_indexed>
+      <is_keyed>0</is_keyed>
+      <is_multi_valued>0</is_multi_valued>
+      <is_required>0</is_required>
+      <label>SCAR Response &gt; 4 Days</label>
+      <name>scar_response</name>
+      <range_inclusive>0</range_inclusive>
+      <readonly>0</readonly>
+      <sort_order>3968</sort_order>
+      <source_id keyed_name="sc Scorecard Location" type="ItemType" name="sc Scorecard Location">1F6309B7CEB14BE7B728C72CA2BA25E3</source_id>
+     </Item>
+     <Item type="Property" id="08D703215BE24113923D080C566B1BA6" action="add">
+      <column_alignment>center</column_alignment>
+      <column_width>80</column_width>
+      <data_type>integer</data_type>
+      <default_value>100</default_value>
+      <is_hidden>1</is_hidden>
+      <is_hidden2>1</is_hidden2>
+      <is_indexed>0</is_indexed>
+      <is_keyed>0</is_keyed>
+      <is_multi_valued>0</is_multi_valued>
+      <is_required>0</is_required>
+      <label>Total</label>
+      <name>total</name>
+      <range_inclusive>0</range_inclusive>
+      <readonly>0</readonly>
+      <sort_order>4992</sort_order>
+      <source_id keyed_name="sc Scorecard Location" type="ItemType" name="sc Scorecard Location">1F6309B7CEB14BE7B728C72CA2BA25E3</source_id>
+     </Item>
+    </Relationships>
+   </Item>
+  </relationship_id>
+  <sort_order>1</sort_order>
+  <source_id keyed_name="sc Manufacturer Scorecard" type="ItemType" name="sc Manufacturer Scorecard">C7E914143E1E4737B106F3BD7B9A3B9A</source_id>
+ </Item>
+ <Item type="ItemType" id="1F6309B7CEB14BE7B728C72CA2BA25E3" action="edit">
+  <Relationships>
+   <Item type="Property" action="edit" where="source_id='1F6309B7CEB14BE7B728C72CA2BA25E3' and name='related_id'">
+    <column_alignment>left</column_alignment>
+    <column_width>100</column_width>
+    <data_source keyed_name="Location" type="ItemType" name="Location">E38F575C956649148C57C5F19FC282C7</data_source>
+    <data_type>item</data_type>
+    <is_hidden>0</is_hidden>
+    <is_hidden2>0</is_hidden2>
+    <is_indexed>1</is_indexed>
+    <is_keyed>0</is_keyed>
+    <is_multi_valued>0</is_multi_valued>
+    <is_required>0</is_required>
+    <item_behavior>float</item_behavior>
+    <label>Plant</label>
+    <name>related_id</name>
+    <range_inclusive>0</range_inclusive>
+    <readonly>0</readonly>
+    <sort_order>3200</sort_order>
+    <source_id keyed_name="sc Scorecard Location" type="ItemType" name="sc Scorecard Location">1F6309B7CEB14BE7B728C72CA2BA25E3</source_id>
+   </Item>
+  </Relationships>
+ </Item>
+ <Item type="View" action="delete" where="source_id='1F6309B7CEB14BE7B728C72CA2BA25E3'"></Item>
+ <Item type="Form" action="delete" where="name='sc Scorecard Location'"></Item>
+</AML>

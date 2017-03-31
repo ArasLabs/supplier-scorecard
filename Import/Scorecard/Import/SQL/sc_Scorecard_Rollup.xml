@@ -1,0 +1,28 @@
+﻿<AML>
+ <Item type="SQL" id="BA330E2B9E284093904CC1C073785CCF" action="add">
+  <execution_count>7</execution_count>
+  <execution_flag>manual</execution_flag>
+  <name>sc_Scorecard_Rollup</name>
+  <old_name>sc_Scorecard_Rollup</old_name>
+  <sqlserver_body><![CDATA[CREATE TRIGGER [sc_Scorecard_Rollup] ON [innovator].[sc_Scorecard_Location] 
+FOR UPDATE
+AS
+/*
+This trigger checks updates the Totals on this Scorecard,  
+and then rolls up all the scorecards for this Vendor and Period
+*/
+ 
+UPDATE sc_Scorecard_Location
+SET   Total= pricing + delivery + responsiveness + scar_response + scar_ca_plan + scar_open + scar_incidents + qi_ppm + qi_audit_score + qi_scn
+
+
+
+UPDATE [sc_Manufacturer_Scorecard]
+SET Score= (select avg(total) from sc_Scorecard_location where sc_Scorecard_location.source_id=sc_Manufacturer_Scorecard.id)
+
+]]></sqlserver_body>
+  <stale>0</stale>
+  <transform_first>0</transform_first>
+  <type>trigger</type>
+ </Item>
+</AML>

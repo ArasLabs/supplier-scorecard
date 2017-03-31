@@ -1,0 +1,8 @@
+﻿<AML>
+ <Item type="Method" id="139E5BF5E6E8440F9C5CE021D5496433" action="add">
+  <method_code><![CDATA[setTimeout("initForm()",200);
+]]></method_code>
+  <method_type>JavaScript</method_type>
+  <name>sc Scorecard OnPopulate</name>
+ </Item>
+</AML>
