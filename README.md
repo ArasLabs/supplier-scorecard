@@ -14,12 +14,14 @@ This project and the following release notes have been migrated from the old Ara
 
 Release | Notes
 --------|--------
-[v3](https://github.com/ArasLabs/supplier-scorecard/releases/tag/v3) | supplier-scorecard
+[v4](https://github.com/ArasLabs/supplier-scorecard/releases/tag/v4) | 	Updated to work with IE8 and 9.3
+[v3](https://github.com/ArasLabs/supplier-scorecard/releases/tag/v3) | Initial release. Tested on 8.2.0 and 9.0.1
 
 #### Supported Aras Versions
 
 Project | Aras
 --------|------
+[v4](https://github.com/ArasLabs/supplier-scorecard/releases/tag/v4) | 9.3
 [v3](https://github.com/ArasLabs/supplier-scorecard/releases/tag/v3) | 8.2.0, 9.0.1
 
 ## Installation

@@ -20,338 +20,348 @@
       <font_family>arial, helvetica, sans-serif</font_family>
       <font_size>8pt</font_size>
       <font_weight>bold</font_weight>
-      <html_code><![CDATA[<script>
-// updated 08.01.2008  peter   supplier scorecard view - 1st release
-//
-//
-//  add editing of cells,  including test if this is an existing rel or a new one
-//
-//
-// -------------------------------------------------------------------------------------------------
-var gridControl = null;
-top.aras.uiAddConfigLink2Doc4Assembly(document, "TreeTable"); 
-//document.body.style.backgroundColor="buttonface";
+      <html_code><![CDATA[
+<script>
+    // updated 08.01.2008  peter   supplier scorecard view - 1st release
+    //
+    //
+    //  add editing of cells,  including test if this is an existing rel or a new one
+    //
+    //
+    // -------------------------------------------------------------------------------------------------
+    var gridControl = null;
+    top.aras.uiAddConfigLink2Doc4Assembly(document, "TreeTable");
+    //document.body.style.backgroundColor="buttonface";
 
-var GridStyle='';
-var EditOldValue="";
-var CurrentCol;
-var LocationArray = new Object();
-var LocationIDArray = new Object();
-var LocationRelIDArray = new Object();
+    var GridStyle = '';
+    var EditOldValue = "";
+    var CurrentCol;
+    var LocationArray = new Object();
+    var LocationIDArray = new Object();
+    var LocationRelIDArray = new Object();
+    var gridWidth = document.documentElement.clientWidth - 7 + "px";
+    var gridHeight = document.documentElement.clientHeight - 32 + "px";
+    //alert(gridWidth);
+    //alert(gridHeight);
+    // ==================================================================================================================
 
-// ==================================================================================================================
+    function clearGrid() {
+        var ids = gridControl.getAllItemIds("|");
+        var id_array = ids.split("|");
+        for (var x = 0; x < id_array.length; x++) {
+            row = id_array[x];
+            gridControl.deleteRow(row);
+        }
+    }
 
-function clearGrid() {
-	var ids = gridControl.getAllItemIds("|");
-  	var id_array = ids.split("|");
-  	for (var x = 0 ; x < id_array.length ; x++) {
-        row = id_array[x];
-	     gridControl.deleteRow(row);
-	}
-}
+    function initForm() {
+        gridControl.Clear();
+        LocationArray = new Object();
+        LocationIDArray = new Object();
+        LocationRelIDArray = new Object();
+        GridStyle = "";
 
-function initForm() {
-	gridControl.Clear();
-	LocationArray = new Object();
-	LocationIDArray = new Object();
-	LocationRelIDArray = new Object();
-	GridStyle="";
-	
-	// 1st create the grid XSLT  then load data
-	var myLocs = document.thisItem.newItem("Location","get");
-	myLocs.setAttribute("select","keyed_name");
-	myLocs.setAttribute("orderBy","keyed_name");
-	myLocs = myLocs.apply();
-	if (myLocs.isError() ) {
-		alert('Internal Load Error: ' + myLocs.getErrorDetail() );
-		return;
-	}
-	myLocs = myLocs.getItemsByXPath("//Item[@type='Location']");
-	var xStr = "";
-	var labelStr = "";
-	GridStyle += '<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">';
-	GridStyle += '  <xsl:template match="/">';
-	GridStyle += '    <table font="Dialog-8" sel_bgColor="#ffff00" sel_TextColor="#ffffff" header_BgColor="buttonface" editable="true" draw_grid="true" multiselect="true" column_draggable="true" enableHtml="false" enterAsTab="false" bgInvert="false"  xmlns:msxsl="urn:schemas-microsoft-com:xslt" xmlns:aras="http://www.aras.com" xmlns:usr="urn:the-xml-files:xslt">';
-	GridStyle += '      <thead>';
-	GridStyle += '        <th bgColor="#d4d0c8" align="c" font="Dialog-9">Rating</th>';
-	GridStyle += '        <th bgColor="#d4d0c8" align="c" font="Dialog-9">Max Points</th>';
-	for (var L=0; L < myLocs.getItemCount(); L++) {
-			GridStyle += '  <th bgColor="#d4d0c8" align="c" font="Dialog-9">' +  myLocs.getItemByIndex(L).getProperty("keyed_name","na") + '</th>';
-			xStr += '<td></td>';
-			labelStr += '<td bgColor="#FFFF00"></td>';
-	}
-	GridStyle += '      </thead>';
-	GridStyle += '      <columns>';
-	GridStyle += '        <column width="220" edit="NOEDIT"  align="l" order="0" />';
-	GridStyle += '        <column width="100"  edit="NOEDIT"  align="c" order="1" />';
-	for (var L=0; L < myLocs.getItemCount(); L++) {
-		GridStyle += '     <column width="90"  edit="EDIT"  align="c" order="' + L+2 + '" />';
-		
-		LocationArray[myLocs.getItemByIndex(L).getProperty("keyed_name","na")] = L+2
-		LocationIDArray[L+2] = myLocs.getItemByIndex(L).getID();
-	}
-	GridStyle += '      </columns>';
-	GridStyle += '      <menu>';
-	GridStyle += '        <emptytag/>';
-	GridStyle += '      </menu>';
-	GridStyle += '    <tr>';
-	GridStyle += '      <xsl:attribute name="id">label0</xsl:attribute>';
-	GridStyle += '      <td bgColor="#FFFF00" font="Dialog-9">Customer Satisfaction</td>';
-	GridStyle += '      <td bgColor="#FFFF00" font="Dialog-9">40</td>';
-	GridStyle += 		  labelStr;
-	GridStyle += '    </tr>';
-	GridStyle += '    <tr>';
-	GridStyle += '      <xsl:attribute name="id">delivery</xsl:attribute>';
-	GridStyle += '      <td>Delivery</td>';
-	GridStyle += '      <td>10</td>';
-	GridStyle += 		  xStr;
-	GridStyle += '    </tr>';
-	GridStyle += '    <tr>';
-	GridStyle += '      <xsl:attribute name="id">pricing</xsl:attribute>';
-	GridStyle += '      <td>Pricing</td>';
-	GridStyle += '      <td>20</td>';
-	GridStyle += 		  xStr;
-	GridStyle += '    </tr>';
-	GridStyle += '    <tr>';
-	GridStyle += '      <xsl:attribute name="id">responsiveness</xsl:attribute>';
-	GridStyle += '      <td>Responsiveness</td>';
-	GridStyle += '      <td>10</td>';
-	GridStyle += 		  xStr;
-	GridStyle += '    </tr>';
-	GridStyle += '    <tr>';
-	GridStyle += '      <xsl:attribute name="id">label1</xsl:attribute>';
-	GridStyle += '      <td bgColor="#FFFF00" font="Dialog-9">SCARs</td>';
-	GridStyle += '      <td bgColor="#FFFF00" font="Dialog-9">30</td>';
-	GridStyle += 		  labelStr;
-	GridStyle += '    </tr>';
-	GridStyle += '    <tr>';
-	GridStyle += '      <xsl:attribute name="id">scar_response</xsl:attribute>';
-	GridStyle += '      <td>Response Received>4 days</td>';
-	GridStyle += '      <td>5</td>';
-	GridStyle += 		  xStr;
-	GridStyle += '    </tr>';
-	GridStyle += '    <tr>';
-	GridStyle += '      <xsl:attribute name="id">scar_ca_plan</xsl:attribute>';
-	GridStyle += '      <td>C/A Plan Received>15 days</td>';
-	GridStyle += '      <td>5</td>';
-	GridStyle += 		  xStr;
-	GridStyle += '    </tr>';
-	GridStyle += '    <tr>';
-	GridStyle += '      <xsl:attribute name="id">scar_open</xsl:attribute>';
-	GridStyle += '      <td>Open SCARs previous Quarter</td>';
-	GridStyle += '      <td>5</td>';
-	GridStyle += 		  xStr;
-	GridStyle += '    </tr>';
-	GridStyle += '    <tr>';
-	GridStyle += '      <xsl:attribute name="id">scar_repeat</xsl:attribute>';
-	GridStyle += '      <td>Repeat SCARs</td>';
-	GridStyle += '      <td>5</td>';
-	GridStyle += 		  xStr;
-	GridStyle += '    </tr>';
-	GridStyle += '    <tr>';
-	GridStyle += '      <xsl:attribute name="id">scar_incidents</xsl:attribute>';
-	GridStyle += '      <td>SCAR Incidents</td>';
-	GridStyle += '      <td>10</td>';
-	GridStyle += 		  xStr;
-	GridStyle += '    </tr>';
-	GridStyle += '    <tr>';
-	GridStyle += '      <xsl:attribute name="id">label2</xsl:attribute>';
-	GridStyle += '      <td bgColor="#FFFF00" font="Dialog-9">Quality Improvement</td>';
-	GridStyle += '      <td bgColor="#FFFF00" font="Dialog-9">30</td>';
-	GridStyle += 		  labelStr;
-	GridStyle += '    </tr>';
-	GridStyle += '    <tr>';
-	GridStyle += '      <xsl:attribute name="id">qi_ppm</xsl:attribute>';
-	GridStyle += '      <td>PPMs</td>';
-	GridStyle += '      <td>10</td>';
-	GridStyle += 		  xStr;
-	GridStyle += '    </tr>';
-	GridStyle += '    <tr>';
-	GridStyle += '      <xsl:attribute name="id">qi_audit_score</xsl:attribute>';
-	GridStyle += '      <td>Audit Scores</td>';
-	GridStyle += '      <td>10</td>';
-	GridStyle += 		  xStr;
-	GridStyle += '    </tr>';
-	GridStyle += '    <tr>';
-	GridStyle += '      <xsl:attribute name="id">qi_scn</xsl:attribute>';
-	GridStyle += '      <td>Supplier Change Notices</td>';
-	GridStyle += '      <td>10</td>';
-	GridStyle += 		  xStr;
-	GridStyle += '    </tr>';
-	GridStyle += '    <tr>';
-	GridStyle += '      <xsl:attribute name="id">total</xsl:attribute>';
-	GridStyle += '      <td bgColor="#FFFF00" font="Dialog-9">Total Score</td>';
-	GridStyle += '      <td bgColor="#FFFF00" font="Dialog-9">100</td>';
-	GridStyle += 		  labelStr;
-	GridStyle += '    </tr>';
-	GridStyle += '    </table>';
-	GridStyle += '  </xsl:template> ';
-	GridStyle += '</xsl:stylesheet>';
-	var gridStyle=new ActiveXObject("Msxml2.DOMDocument.4.0");
-	gridStyle.loadXML(GridStyle);
+        // 1st create the grid XSLT  then load data
+        var myLocs = document.thisItem.newItem("Location", "get");
+        myLocs.setAttribute("select", "keyed_name");
+        myLocs.setAttribute("orderBy", "keyed_name");
+        myLocs = myLocs.apply();
+        if (myLocs.isError()) {
+            alert('Internal Load Error: ' + myLocs.getErrorDetail());
+            return;
+        }
+        myLocs = myLocs.getItemsByXPath("//Item[@type='Location']");
+        
+        var xStr = "";
+        var labelStr = "";
+        GridStyle += '<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">';
+        GridStyle += '  <xsl:template match="/">';
+        GridStyle += '    <table font="Dialog-8" sel_bgColor="#ffff00" sel_TextColor="#ffffff" header_BgColor="buttonface" editable="true" draw_grid="true" multiselect="true" column_draggable="true" enableHtml="false" enterAsTab="false" bgInvert="false"  xmlns:msxsl="urn:schemas-microsoft-com:xslt" xmlns:aras="http://www.aras.com" xmlns:usr="urn:the-xml-files:xslt">';
+        GridStyle += '      <thead>';
+        GridStyle += '        <th bgColor="#d4d0c8" align="c" font="Dialog-9">Rating</th>';
+        GridStyle += '        <th bgColor="#d4d0c8" align="c" font="Dialog-9">Max Points</th>';
+        for (var L = 0; L < myLocs.getItemCount(); L++) {
+            GridStyle += '  <th bgColor="#d4d0c8" align="c" font="Dialog-9">' + myLocs.getItemByIndex(L).getProperty("keyed_name", "na") + '</th>';
+            xStr += '<td></td>';
+            labelStr += '<td bgColor="#FFFF00"></td>';
+        }
+        GridStyle += '      </thead>';
+        GridStyle += '      <columns>';
+        GridStyle += '        <column width="220" edit="NOEDIT"  align="l" order="0" />';
+        GridStyle += '        <column width="100"  edit="NOEDIT"  align="c" order="1" />';
+        var O=1;
+        for (var L = 0; L < myLocs.getItemCount(); L++) {
+            O++;
+            GridStyle += '     <column width="90"  edit="EDIT"  align="c" order="'+ O +'" />';
+            LocationArray[myLocs.getItemByIndex(L).getProperty("keyed_name", "na")] = L + 2
+            LocationIDArray[L + 2] = myLocs.getItemByIndex(L).getID();
+        }
+        GridStyle += '      </columns>';
+        GridStyle += '      <menu>';
+        GridStyle += '        <emptytag/>';
+        GridStyle += '      </menu>';
+        GridStyle += '    <tr>';
+        GridStyle += '      <xsl:attribute name="id">label0</xsl:attribute>';
+        GridStyle += '      <td bgColor="#FFFF00" font="Dialog-9">Customer Satisfaction</td>';
+        GridStyle += '      <td bgColor="#FFFF00" font="Dialog-9">40</td>';
+        GridStyle += labelStr;
+        GridStyle += '    </tr>';
+        GridStyle += '    <tr>';
+        GridStyle += '      <xsl:attribute name="id">delivery</xsl:attribute>';
+        GridStyle += '      <td>Delivery</td>';
+        GridStyle += '      <td>10</td>';
+        GridStyle += xStr;
+        GridStyle += '    </tr>';
+        GridStyle += '    <tr>';
+        GridStyle += '      <xsl:attribute name="id">pricing</xsl:attribute>';
+        GridStyle += '      <td>Pricing</td>';
+        GridStyle += '      <td>20</td>';
+        GridStyle += xStr;
+        GridStyle += '    </tr>';
+        GridStyle += '    <tr>';
+        GridStyle += '      <xsl:attribute name="id">responsiveness</xsl:attribute>';
+        GridStyle += '      <td>Responsiveness</td>';
+        GridStyle += '      <td>10</td>';
+        GridStyle += xStr;
+        GridStyle += '    </tr>';
+        GridStyle += '    <tr>';
+        GridStyle += '      <xsl:attribute name="id">label1</xsl:attribute>';
+        GridStyle += '      <td bgColor="#FFFF00" font="Dialog-9">SCARs</td>';
+        GridStyle += '      <td bgColor="#FFFF00" font="Dialog-9">30</td>';
+        GridStyle += labelStr;
+        GridStyle += '    </tr>';
+        GridStyle += '    <tr>';
+        GridStyle += '      <xsl:attribute name="id">scar_response</xsl:attribute>';
+        GridStyle += '      <td>Response Received>4 days</td>';
+        GridStyle += '      <td>5</td>';
+        GridStyle += xStr;
+        GridStyle += '    </tr>';
+        GridStyle += '    <tr>';
+        GridStyle += '      <xsl:attribute name="id">scar_ca_plan</xsl:attribute>';
+        GridStyle += '      <td>C/A Plan Received>15 days</td>';
+        GridStyle += '      <td>5</td>';
+        GridStyle += xStr;
+        GridStyle += '    </tr>';
+        GridStyle += '    <tr>';
+        GridStyle += '      <xsl:attribute name="id">scar_open</xsl:attribute>';
+        GridStyle += '      <td>Open SCARs previous Quarter</td>';
+        GridStyle += '      <td>5</td>';
+        GridStyle += xStr;
+        GridStyle += '    </tr>';
+        GridStyle += '    <tr>';
+        GridStyle += '      <xsl:attribute name="id">scar_repeat</xsl:attribute>';
+        GridStyle += '      <td>Repeat SCARs</td>';
+        GridStyle += '      <td>5</td>';
+        GridStyle += xStr;
+        GridStyle += '    </tr>';
+        GridStyle += '    <tr>';
+        GridStyle += '      <xsl:attribute name="id">scar_incidents</xsl:attribute>';
+        GridStyle += '      <td>SCAR Incidents</td>';
+        GridStyle += '      <td>10</td>';
+        GridStyle += xStr;
+        GridStyle += '    </tr>';
+        GridStyle += '    <tr>';
+        GridStyle += '      <xsl:attribute name="id">label2</xsl:attribute>';
+        GridStyle += '      <td bgColor="#FFFF00" font="Dialog-9">Quality Improvement</td>';
+        GridStyle += '      <td bgColor="#FFFF00" font="Dialog-9">30</td>';
+        GridStyle += labelStr;
+        GridStyle += '    </tr>';
+        GridStyle += '    <tr>';
+        GridStyle += '      <xsl:attribute name="id">qi_ppm</xsl:attribute>';
+        GridStyle += '      <td>PPMs</td>';
+        GridStyle += '      <td>10</td>';
+        GridStyle += xStr;
+        GridStyle += '    </tr>';
+        GridStyle += '    <tr>';
+        GridStyle += '      <xsl:attribute name="id">qi_audit_score</xsl:attribute>';
+        GridStyle += '      <td>Audit Scores</td>';
+        GridStyle += '      <td>10</td>';
+        GridStyle += xStr;
+        GridStyle += '    </tr>';
+        GridStyle += '    <tr>';
+        GridStyle += '      <xsl:attribute name="id">qi_scn</xsl:attribute>';
+        GridStyle += '      <td>Supplier Change Notices</td>';
+        GridStyle += '      <td>10</td>';
+        GridStyle += xStr;
+        GridStyle += '    </tr>';
+        GridStyle += '    <tr>';
+        GridStyle += '      <xsl:attribute name="id">total</xsl:attribute>';
+        GridStyle += '      <td bgColor="#FFFF00" font="Dialog-9">Total Score</td>';
+        GridStyle += '      <td bgColor="#FFFF00" font="Dialog-9">100</td>';
+        GridStyle += labelStr;
+        GridStyle += '    </tr>';
+        GridStyle += '    </table>';
+        GridStyle += '  </xsl:template> ';
+        GridStyle += '</xsl:stylesheet>';
+        var gridStyle = new ActiveXObject("Msxml2.DOMDocument.4.0");
+        gridStyle.loadXML(GridStyle);
 
-   var gridXML = document.thisItem.dom.transformNode(gridStyle);
-   gridControl.InitXml(gridXML);
+        var gridXML = document.thisItem.dom.transformNode(gridStyle);
+       //prompt("gridXML",gridXML);
 
-	var assyID = document.thisItem.getID();
+        gridControl.InitXml(gridXML);
 
-	var relItems = document.thisItem.newItem("sc Scorecard Location", "get");	
-	relItems.setProperty("source_id", assyID);
-	relItems.setAttribute("select","related_id,total,delivery,pricing,qi_audit_score,qi_ppm,qi_scn,related_id,responsiveness,scar_ca_plan,scar_incidents,scar_open,scar_repeat,scar_response");
-	var scores=relItems.apply();
-	//debugger;
-   scores = scores.getItemsByXPath("//Item[@type='sc Scorecard Location']");
-   for (r=0; r< scores.getItemCount(); r++ ) {
-      var score = scores.getItemByIndex(r);
-      
-      document.thisItem.addRelationship(score);  // so that we can make dom edits
-      
-      var Loc=score.getPropertyAttribute("related_id","keyed_name","na")
-      if (Loc !="" ) {
-	      var oNodeList = score.node.childNodes;
-	      for (var i=0; i < oNodeList.length; i++) {
-	      	var row = oNodeList.item(i).nodeName;
-	      	if (row != "related_id" && row !="id") {
-					var col = LocationArray[Loc];
-					var val = oNodeList.item(i).text;
-					var OK = gridControl.isItemExists( row );
-               if (OK) gridControl.cells( row, col ).setValue( val );
-               
-					LocationRelIDArray[col] = score.getID();               
-				}
-		   }
-		}       
-   }	
-}
+        var assyID = document.thisItem.getID();
 
-function setEditMode(item) {  // responds to the windows top toolbar actions
-	gridControl.turnEditOff();
-	clearGrid();
-	initForm();
-}
+        var relItems = document.thisItem.newItem("sc Scorecard Location", "get");
+        relItems.setProperty("source_id", assyID);
+        relItems.setAttribute("select", "related_id,total,delivery,pricing,qi_audit_score,qi_ppm,qi_scn,related_id,responsiveness,scar_ca_plan,scar_incidents,scar_open,scar_repeat,scar_response");
+        var scores = relItems.apply();
+        //debugger;
+        scores = scores.getItemsByXPath("//Item[@type='sc Scorecard Location']");
+        for (r = 0; r < scores.getItemCount(); r++) {
+            var score = scores.getItemByIndex(r);
 
-function setViewMode(item) {  // responds to the windows top toolbar actions
-	gridControl.turnEditOff();
-	clearGrid();
-	initForm();
-}
+            document.thisItem.addRelationship(score);  // so that we can make dom edits
 
-function onMenuClick(menuChoice) {
-  //if (menuChoice == 'Open')   {
-  //   processCommand('Open');
-  //}
-}
+            var Loc = score.getPropertyAttribute("related_id", "keyed_name", "na")
+            if (Loc != "") {
+                var oNodeList = score.node.childNodes;
+                for (var i = 0; i < oNodeList.length; i++) {
+                    var row = oNodeList.item(i).nodeName;
+                    if (row != "related_id" && row != "id") {
+                        var col = LocationArray[Loc];
+                        var val = oNodeList.item(i).text;
+                        var OK = gridControl.isItemExists(row);
+                        if (OK) gridControl.cells(row, col).setValue(val);
 
-function onOpenCommand() {
-  var selectedId = gridControl.getSelectedId();
-  if (!selectedId) return;
+                        LocationRelIDArray[col] = score.getID();
+                    }
+                }
+            }
+       
+       }
+       // prompt("grid", gridControl.dom.xml);
+    }
 
-  //top.aras.uiShowItem("Part", selectedId);
-}
+    function setEditMode(item) {  // responds to the windows top toolbar actions
+        gridControl.turnEditOff();
+        clearGrid();
+        initForm();
+    }
+
+    function setViewMode(item) {  // responds to the windows top toolbar actions
+        gridControl.turnEditOff();
+        clearGrid();
+        initForm();
+    }
+
+    function onMenuClick(menuChoice) {
+        //if (menuChoice == 'Open')   {
+        //   processCommand('Open');
+        //}
+    }
+
+    function onOpenCommand() {
+        var selectedId = gridControl.getSelectedId();
+        if (!selectedId) return;
+
+        //top.aras.uiShowItem("Part", selectedId);
+    }
 
 
-function onDoubleClick(r) {
-  top.aras.uiShowItem("Part", r);
-}
+    function onDoubleClick(r) {
+        top.aras.uiShowItem("Part", r);
+    }
 
-function processCommand(cmdID) {
-	gridControl.turnEditOff();
+    function processCommand(cmdID) {
+        gridControl.turnEditOff();
 
-	var cmdHandlerName = "on" + cmdID + "Command";
-	var cmdHandler = window[cmdHandlerName];
-	if (cmdHandler) cmdHandler();
-}
+        var cmdHandlerName = "on" + cmdID + "Command";
+        var cmdHandler = window[cmdHandlerName];
+        if (cmdHandler) cmdHandler();
+    }
 
-function InitMenu(row,col) {
-  var mnu = this.gridControl.menu();
-  mnu.removeAll();
-  //mnu.add("Open");
-}
+    function InitMenu(row, col) {
+        var mnu = this.gridControl.menu();
+        mnu.removeAll();
+        //mnu.add("Open");
+    }
 
-function onClick(r,c) {
-  if (document.thisItem.isLocked() != 1 && !document.thisItem.isNew() && document.thisItem.getAttribute("action")!="add")   {
-  }
-}
+    function onClick(r, c) {
+        if (document.thisItem.isLocked() != 1 && !document.thisItem.isNew() && document.thisItem.getAttribute("action") != "add") {
+        }
+    }
 
-function onKeyPressed( kEv ) {
-  	var keyCode = kEv.keyCode;
-	// can be used to respond to F keys etc
-	return true;
-}
+    function onKeyPressed(kEv) {
+        var keyCode = kEv.keyCode;
+        // can be used to respond to F keys etc
+        return true;
+    }
 
-function saveEditedData() {
-	// a handler for the standard Save button
-	gridControl.turnEditOff();
-}
+    function saveEditedData() {
+        // a handler for the standard Save button
+        gridControl.turnEditOff();
+    }
 
-function OnEditCell(event,row,col)  {
-	if (event==1) 	return;  // this is ongoing typing event - ignore it
+    function OnEditCell(event, row, col) {
+        if (event == 1) return;  // this is ongoing typing event - ignore it
 
-  	if (document.thisItem.isLocked() != 1 && !document.thisItem.isNew() && document.thisItem.getAttribute("action")!="add") {
-		//  in this situation the grid should not be editable 
-		return false;
-	}
+        if (document.thisItem.isLocked() != 1 && !document.thisItem.isNew() && document.thisItem.getAttribute("action") != "add") {
+            //  in this situation the grid should not be editable 
+            return false;
+        }
 
-	if (event==0) { //  this is START of edit event --  store the old value of the cell
-	   // do not allow editing in the summary rows
-	   if (row == 'label0' || row=='label1' || row=='label2' || row=='total' ) return false;
-	   
-	   if (col <2) return false;
-		EditOldValue = gridControl.cells(row,col).getValue();
-		CurrentCol = col;
-	}
+        if (event == 0) { //  this is START of edit event --  store the old value of the cell
+            // do not allow editing in the summary rows
+            if (row == 'label0' || row == 'label1' || row == 'label2' || row == 'total') return false;
 
-	if (event==2) {    //  end of editing -   test for valid range before accepting the input
-		var NewValue = gridControl.cells(row,col).getValue();
-		if ( NewValue == EditOldValue ) return;
-		
-		// find max value for this row
-		var max = gridControl.cells(row,1).getValue();
-		maxNum = parseInt(max);
-		if (isNaN(NewValue) ) {
-			gridControl.cells(row,col).setValue(EditOldValue);
-			return;
-		}
-		var newNum = parseInt(NewValue);
-		
-		if (newNum<0 || newNum>maxNum) {
-		   NewValue = max;
-			gridControl.cells(row,col).setValue(NewValue);
-		}
-		
-		
-		document.thisItem.setAttribute("isDirty","1");
-		document.thisItem.setAttribute("update","1");
-		
-		// decide if this relationship item is already in the DOM or needs to be created
-		if ( LocationRelIDArray[col] )  { 
-			var LocID = LocationIDArray[col];
-			
-			var RelItem = document.thisItem.getItemsByXPath("//Item[@id='" + LocationRelIDArray[col] + "']");
-			if (RelItem.getItemCount() == 0 ) {
-			    alert('internal error: relationship not found on Edit');
-	 			 gridControl.cells(row,col).setValue(EditOldValue);
-			    return;
-			}
-			RelItem = RelItem.getItemByIndex(0);
-			RelItem.setProperty(row,NewValue);
-			RelItem.setAttribute("isDirty","1");
-			if (RelItem.getAttribute("action") != "add" ) RelItem.setAttribute("action","update");
-			
-		} else {
-		   // need to create a new Score relationship
-		   var score = document.thisItem.newItem("sc Scorecard Location", "add");
-		   score.setAttribute("isDirty","1");
-		   score.setProperty(row,NewValue);
-		   score.setProperty("related_id",LocationIDArray[col]);
-		   document.thisItem.addRelationship(score);	
-		   
-		   // update the internal arrays so that this Location is now registered in the client cache.
-			LocationRelIDArray[col] = score.getID();               
-		   
-		}
-	}
-}
+            if (col < 2) return false;
+            EditOldValue = gridControl.cells(row, col).getValue();
+            CurrentCol = col;
+        }
+
+        if (event == 2) {    //  end of editing -   test for valid range before accepting the input
+            var NewValue = gridControl.cells(row, col).getValue();
+            if (NewValue == EditOldValue) return;
+
+            // find max value for this row
+            var max = gridControl.cells(row, 1).getValue();
+            maxNum = parseInt(max);
+            if (isNaN(NewValue)) {
+                gridControl.cells(row, col).setValue(EditOldValue);
+                return;
+            }
+            var newNum = parseInt(NewValue);
+
+            if (newNum < 0 || newNum > maxNum) {
+                NewValue = max;
+                gridControl.cells(row, col).setValue(NewValue);
+            }
+
+
+            document.thisItem.setAttribute("isDirty", "1");
+            document.thisItem.setAttribute("update", "1");
+
+            // decide if this relationship item is already in the DOM or needs to be created
+            if (LocationRelIDArray[col]) {
+                var LocID = LocationIDArray[col];
+
+                var RelItem = document.thisItem.getItemsByXPath("//Item[@id='" + LocationRelIDArray[col] + "']");
+                if (RelItem.getItemCount() == 0) {
+                    alert('internal error: relationship not found on Edit');
+                    gridControl.cells(row, col).setValue(EditOldValue);
+                    return;
+                }
+                RelItem = RelItem.getItemByIndex(0);
+                RelItem.setProperty(row, NewValue);
+                RelItem.setAttribute("isDirty", "1");
+                if (RelItem.getAttribute("action") != "add") RelItem.setAttribute("action", "update");
+
+            } else {
+                // need to create a new Score relationship
+                var score = document.thisItem.newItem("sc Scorecard Location", "add");
+                score.setAttribute("isDirty", "1");
+                score.setProperty(row, NewValue);
+                score.setProperty("related_id", LocationIDArray[col]);
+                document.thisItem.addRelationship(score);
+
+                // update the internal arrays so that this Location is now registered in the client cache.
+                LocationRelIDArray[col] = score.getID();
+
+            }
+        }
+    }
 
 </script>
 
@@ -379,31 +389,31 @@ function OnEditCell(event,row,col)  {
   return true;
 </script>
 
-<table width="400" height="100%" name="outerTable" id="outerTable" border="0" cellspacing="0" cellpadding"0" >
+<table width="100%" height="100%" name="outerTable" id="outerTable" border="0" cellspacing="0" cellpadding"0" >
   	<td valign="top" width="100%">
     <comment id="grid_commented">
 	    <object id="grid"
-        style="width:expression(document.body.clientWidth-7); height:expression(document.body.clientHeight-32)"
+			width="773px" 
+			height= "469px"
 	      onbeforedeactivate="saveEditedData()"
 	      classid="../cbin/TreeTable.dll#Aras.Client.Controls.GridContainer">
 	    </object>
 		</comment>
 		<script>
-		WriteUncommentedObject("grid_commented");
+		    WriteUncommentedObject("grid_commented");
 		</script>
   </td>
  </tr>
 </table>]]></html_code>
       <is_disabled>0</is_disabled>
       <is_visible>1</is_visible>
-      <label></label>
       <list_no_blank>0</list_no_blank>
       <name>all_code</name>
       <positioning>absolute</positioning>
       <sort_order>640</sort_order>
       <source_id keyed_name="4ACEBD4899C2447A91DF43BED24E87E9" type="Body">4ACEBD4899C2447A91DF43BED24E87E9</source_id>
       <tab_stop>1</tab_stop>
-      <x>1</x>
+      <x>16</x>
       <y>57</y>
      </Item>
      <Item type="Field" id="75269DE2C0F54CAAB46F8B730F58EF2F" action="add">
@@ -437,7 +447,7 @@ function OnEditCell(event,row,col)  {
       <font_weight>bold</font_weight>
       <is_disabled>0</is_disabled>
       <is_visible>1</is_visible>
-      <label>Period:</label>
+      <label xml:lang="en">Period:</label>
       <label_position>top</label_position>
       <list_no_blank>0</list_no_blank>
       <name>period</name>
@@ -462,7 +472,7 @@ function OnEditCell(event,row,col)  {
       <font_weight>bold</font_weight>
       <is_disabled>1</is_disabled>
       <is_visible>1</is_visible>
-      <label>Score: </label>
+      <label xml:lang="en">Score: </label>
       <label_position>top</label_position>
       <list_no_blank>0</list_no_blank>
       <name>score</name>
@@ -486,7 +496,7 @@ function OnEditCell(event,row,col)  {
       <font_weight>bold</font_weight>
       <is_disabled>1</is_disabled>
       <is_visible>1</is_visible>
-      <label>Supplier:</label>
+      <label xml:lang="en">Supplier:</label>
       <label_position>top</label_position>
       <list_no_blank>0</list_no_blank>
       <name>source_id</name>

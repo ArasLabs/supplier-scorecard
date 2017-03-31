@@ -21,7 +21,7 @@ UPDATE [sc_Manufacturer_Scorecard]
 SET Score= (select avg(total) from sc_Scorecard_location where sc_Scorecard_location.source_id=sc_Manufacturer_Scorecard.id)
 
 ]]></sqlserver_body>
-  <stale>0</stale>
+  <stale>1</stale>
   <transform_first>0</transform_first>
   <type>trigger</type>
  </Item>
